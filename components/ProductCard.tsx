@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { Product } from '@/types';
-import { useCart } from '@/lib/cart-context';
-import { Button } from '@/components/ui/button';
+import { Product } from "@/types";
+import { useCart } from "@/lib/cart-context";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -26,13 +26,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: Number(product.price), // ✅ Ensure price is a number
       quantity: 1,
       image: product.image,
     });
-    
+
     toast({
-      title: 'Added to cart',
+      title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
   };
@@ -55,7 +55,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
+        <p className="text-2xl font-bold">
+          ${Number(product.price).toFixed(2)} {/* ✅ Ensure price is always a number */}
+        </p>
         <p className="text-sm text-muted-foreground mt-2">
           Stock: {product.stock} units
         </p>

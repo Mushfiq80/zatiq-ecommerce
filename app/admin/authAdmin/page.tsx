@@ -1,24 +1,29 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AdminAuth() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { toast } = useToast();
+  const { login } = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // TODO: Implement Firebase authentication
-    toast({
-      title: 'Coming soon',
-      description: 'Firebase authentication will be implemented here.',
-    });
+    try {
+      await login(email, password);
+      router.push("/admin/adminProducts"); // Redirect after successful login
+      toast.success("Logged in successfully!", { position: "top-right", autoClose: 3000 });
+    } catch {
+      toast.error("Login failed!", { position: "top-right", autoClose: 3000 });
+    }
   };
 
   return (
@@ -28,7 +33,7 @@ export default function AdminAuth() {
           <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
                 Email

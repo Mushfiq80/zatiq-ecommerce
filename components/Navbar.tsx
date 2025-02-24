@@ -33,7 +33,7 @@ export default function Navbar() {
             <Link href="/products" className="hover:text-primary">
               Products
             </Link>
-            <Link href="/admin/auth" className="hover:text-primary">
+            <Link href="/admin/authAdmin" className="hover:text-primary">
               Admin
             </Link>
           </div>
