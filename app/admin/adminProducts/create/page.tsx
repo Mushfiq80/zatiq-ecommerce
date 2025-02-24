@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { addProduct } from "@/lib/firebase"; // ✅ Import Firestore function
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function CreateProduct() {
   const router = useRouter();
@@ -28,8 +29,9 @@ export default function CreateProduct() {
     setError(null);
 
     try {
-      await addProduct(product); // ✅ Add product to Firestore
-      router.push("/admin/adminProducts"); // ✅ Redirect after success
+      toast.success("Product added successfully!"); // ✅ Add success message
+      await addProduct(product); //  Add product to Firestore
+      router.push("/admin/adminProducts");
     } catch (err) {
       setError("Failed to add product. Please try again.");
     } finally {

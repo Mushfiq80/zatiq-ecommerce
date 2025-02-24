@@ -19,7 +19,7 @@ export default function AdminAuth() {
     e.preventDefault();
     try {
       await login(email, password);
-      router.push("/admin/adminProducts"); // Redirect after successful login
+      router.push("/admin/adminProducts"); 
       toast.success("Logged in successfully!", { position: "top-right", autoClose: 3000 });
     } catch {
       toast.error("Login failed!", { position: "top-right", autoClose: 3000 });

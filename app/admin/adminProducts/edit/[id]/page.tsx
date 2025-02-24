@@ -20,7 +20,7 @@ export default function EditProduct() {
           setError("Product not found");
           return;
         }
-        setProduct(fetchedProduct as Product); // ✅ Ensure it's treated as a full Product
+        setProduct(fetchedProduct as Product); 
       } catch (err) {
         setError("Failed to fetch product");
       } finally {
@@ -41,7 +41,7 @@ export default function EditProduct() {
 
     try {
       await updateProduct(id as string, product);
-      router.push("/admin/adminProducts"); // ✅ Redirect after update
+      router.push("/admin/adminProducts"); 
     } catch {
       setError("Failed to update product");
     }

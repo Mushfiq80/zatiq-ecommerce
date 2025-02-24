@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDyvc6VmGh7DehoRF89w_J063xEnAm7gFs",
-  authDomain: "zatiq-ecommerce.firebaseapp.com",
-  projectId: "zatiq-ecommerce",
-  storageBucket: "zatiq-ecommerce.firebasestorage.app",
-  messagingSenderId: "271581989581",
-  appId: "1:271581989581:web:e1b48e16f31972bf66f784"
+    apiKey: "AIzaSyDyvc6VmGh7DehoRF89w_J063xEnAm7gFs",
+    authDomain: "zatiq-ecommerce.firebaseapp.com",
+    projectId: "zatiq-ecommerce",
+    storageBucket: "zatiq-ecommerce.firebasestorage.app",
+    messagingSenderId: "271581989581",
+    appId: "1:271581989581:web:e1b48e16f31972bf66f784"
 };
 
 // Initialize Firebase
@@ -39,22 +39,22 @@ export const getProducts = async (): Promise<Product[]> => {
 
 export const addProduct = async (product: {
   name: string;
-  price: number | string;
+  price: number;
   image?: string;
   description?: string;
   stock: number;
   category?: string;
 }) => {
   try {
-    // ✅ Ensure `price` is always stored as a number
+    // ✅ Ensure Firestore does not receive `undefined` values
     const newProduct = {
       name: product.name || "Unnamed Product",
-      price: typeof product.price === "number" ? product.price : parseFloat(product.price) || 0,
+      price: product.price || 0,
       image: product.image || "/placeholder.jpg",
       description: product.description || "No description available.",
       stock: product.stock ?? 0,
       category: product.category || "Uncategorized",
-      createdAt: new Date(),
+      createdAt: new Date(), // ✅ Helps with ordering
     };
 
     await addDoc(collection(db, "products"), newProduct);
@@ -70,11 +70,11 @@ export const updateProduct = async (id: string, product: { [key: string]: any })
 };
 
 interface Product {
-  [key: string]: any;
+    [key: string]: any;
 }
 
 export const deleteProduct = async (id: string): Promise<void> => {
-  await deleteDoc(doc(db, "products", id));
+    await deleteDoc(doc(db, "products", id));
 };
 
 

@@ -3,15 +3,9 @@
 import { Product } from "@/types";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation"; // ✅ Correct usage
 import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
@@ -21,12 +15,13 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { toast } = useToast();
+  const router = useRouter(); // ✅ Use Next.js router
 
   const handleAddToCart = () => {
     addItem({
       id: product.id,
       name: product.name,
-      price: Number(product.price), // ✅ Ensure price is a number
+      price: Number(product.price),
       quantity: 1,
       image: product.image,
     });
@@ -37,35 +32,34 @@ export default function ProductCard({ product }: ProductCardProps) {
     });
   };
 
+  const handleProductClick = () => {
+    // ✅ Store product data in localStorage before navigation
+    localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
+
+    // ✅ Navigate to the product page with just the ID
+    router.push(`/product/${product.id}`);
+  };
+
   return (
     <Card className="overflow-hidden">
       <div className="relative h-48 w-full">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover"
-        />
+        <Image src={product.image} alt={product.name} fill className="object-cover" />
       </div>
       <CardHeader>
         <CardTitle className="line-clamp-1">
-          <Link href={`/products/${product.id}`} className="hover:underline">
+          <p onClick={handleProductClick} className="hover:underline cursor-pointer">
             {product.name}
-          </Link>
+          </p>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold">
-          ${Number(product.price).toFixed(2)} {/* ✅ Ensure price is always a number */}
-        </p>
+        <p className="text-2xl font-bold">${Number(product.price).toFixed(2)}</p>
         <p className="text-sm text-muted-foreground mt-2">
           Stock: {product.stock} units
         </p>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleAddToCart} className="w-full">
-          Add to Cart
-        </Button>
+        <Button onClick={handleAddToCart} className="w-full">Add to Cart</Button>
       </CardFooter>
     </Card>
   );

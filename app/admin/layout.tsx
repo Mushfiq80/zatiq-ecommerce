@@ -9,11 +9,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!user) {
-      router.push("/admin/authAdmin"); // Redirect if not logged in
+      router.push("/admin/authAdmin"); 
     }
   }, [user, router]);
 
-  if (!user) return <p>Loading...</p>; // Prevent flash before redirect
+  if (!user) return <p>Loading...</p>; 
 
   return <>{children}</>;
 }

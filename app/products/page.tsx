@@ -15,14 +15,14 @@ export default function ProductsPage() {
       try {
         const productList = await getProducts();
         
-        // ✅ Ensure correct type by explicitly casting
+       
         const formattedProducts: Product[] = productList.map((product) => ({
           id: product.id,
           name: product.name,
           price: product.price,
           description: product.description || "",
           image: product.image || "",
-          stock: product.stock ?? 0,  // Default to 0 if undefined
+          stock: product.stock ?? 0, // default to zero
           category: product.category || "Uncategorized",
         }));
 
