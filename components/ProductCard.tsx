@@ -5,7 +5,7 @@ import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Correct usage
+import { useRouter } from "next/navigation"; 
 import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
@@ -15,7 +15,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { toast } = useToast();
-  const router = useRouter(); // ✅ Use Next.js router
+  const router = useRouter(); 
 
   const handleAddToCart = () => {
     addItem({
@@ -33,10 +33,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const handleProductClick = () => {
-    // ✅ Store product data in localStorage before navigation
+    
     localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
 
-    // ✅ Navigate to the product page with just the ID
     router.push(`/product/${product.id}`);
   };
 
