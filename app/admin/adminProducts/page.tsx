@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProducts } from "@/lib/firebase";
+import { getProducts, deleteProduct } from "@/lib/firebase";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 interface Product {
   id: string;
   name: string;
-  price: number | string; // ✅ Handle both number & string
+  price: number | string;
   stock: number;
 }
 
@@ -21,10 +22,9 @@ export default function ProductList() {
       try {
         const productList = await getProducts();
 
-        // ✅ Convert `price` to a number if it’s a string
         const formattedProducts: Product[] = productList.map((product) => ({
           ...product,
-          price: Number(product.price) || 0, // Convert `price` to number safely
+          price: Number(product.price) || 0,
         }));
 
         setProducts(formattedProducts);
@@ -36,6 +36,20 @@ export default function ProductList() {
     };
     fetchProducts();
   }, []);
+
+  // ✅ Handle product deletion
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      await deleteProduct(id);
+      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+      toast.warning("Product deleted successfully.");
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      setError("Failed to delete product.");
+    }
+  };
 
   if (loading) return <p className="text-center py-8">Loading products...</p>;
   if (error) return <p className="text-center py-8 text-red-500">{error}</p>;
@@ -60,14 +74,14 @@ export default function ProductList() {
             products.map((product) => (
               <tr key={product.id} className="text-center">
                 <td className="border p-2">{product.name}</td>
-                <td className="border p-2">${Number(product.price).toFixed(2)}</td> {/* ✅ Fix */}
+                <td className="border p-2">${Number(product.price).toFixed(2)}</td>
                 <td className="border p-2">{product.stock}</td>
                 <td className="border p-2 space-x-2">
                   <Link href={`/admin/adminProducts/edit/${product.id}`}>
                     <button className="bg-yellow-500 text-white px-2 py-1">Edit</button>
                   </Link>
                   <button
-                    onClick={() => console.log("Delete product", product.id)}
+                    onClick={() => handleDelete(product.id)}
                     className="bg-red-500 text-white px-2 py-1"
                   >
                     Delete

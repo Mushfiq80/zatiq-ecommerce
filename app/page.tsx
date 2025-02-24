@@ -15,7 +15,7 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
           <div className="text-center text-white space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold">Welcome to Our Shop</h1>
+            <h1 className="text-4xl md:text-6xl font-semibold">Welcome to Zatiq Shop</h1>
             <p className="text-lg md:text-xl max-w-2xl mx-auto px-4">
               Discover our curated collection of premium products
             </p>

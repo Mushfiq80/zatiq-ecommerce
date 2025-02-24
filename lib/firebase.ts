@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDyvc6VmGh7DehoRF89w_J063xEnAm7gFs",
-    authDomain: "zatiq-ecommerce.firebaseapp.com",
-    projectId: "zatiq-ecommerce",
-    storageBucket: "zatiq-ecommerce.firebasestorage.app",
-    messagingSenderId: "271581989581",
-    appId: "1:271581989581:web:e1b48e16f31972bf66f784"
+  apiKey: "AIzaSyDyvc6VmGh7DehoRF89w_J063xEnAm7gFs",
+  authDomain: "zatiq-ecommerce.firebaseapp.com",
+  projectId: "zatiq-ecommerce",
+  storageBucket: "zatiq-ecommerce.firebasestorage.app",
+  messagingSenderId: "271581989581",
+  appId: "1:271581989581:web:e1b48e16f31972bf66f784"
 };
 
 // Initialize Firebase
@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Firestore CRUD functions
+
 interface Product {
   id: string;
   name: string;
@@ -46,7 +46,7 @@ export const addProduct = async (product: {
   category?: string;
 }) => {
   try {
-    // ✅ Ensure Firestore does not receive `undefined` values
+
     const newProduct = {
       name: product.name || "Unnamed Product",
       price: product.price || 0,
@@ -54,7 +54,7 @@ export const addProduct = async (product: {
       description: product.description || "No description available.",
       stock: product.stock ?? 0,
       category: product.category || "Uncategorized",
-      createdAt: new Date(), // ✅ Helps with ordering
+      createdAt: new Date(), // 
     };
 
     await addDoc(collection(db, "products"), newProduct);
@@ -70,11 +70,12 @@ export const updateProduct = async (id: string, product: { [key: string]: any })
 };
 
 interface Product {
-    [key: string]: any;
+  [key: string]: any;
 }
 
-export const deleteProduct = async (id: string): Promise<void> => {
-    await deleteDoc(doc(db, "products", id));
+export const deleteProduct = async (id: string) => {
+  const docRef = doc(db, "products", id);
+  await deleteDoc(docRef);
 };
 
 
@@ -83,7 +84,7 @@ export const getProductById = async (id: string) => {
     const docRef = doc(db, "products", id);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) return null; // ✅ Return `null` if product doesn't exist
+    if (!docSnap.exists()) return null;
 
     const data = docSnap.data();
     return {

@@ -2,7 +2,7 @@ import { getProducts, getProductById } from "@/lib/firebase";
 import Image from "next/image";
 import AddToCartButton from "@/components/AddToCartButton";
 
-// ✅ Generate static params at build time
+
 export async function generateStaticParams() {
   const products = await getProducts(); // Fetch all product IDs
   return products.map((product) => ({ id: product.id }));

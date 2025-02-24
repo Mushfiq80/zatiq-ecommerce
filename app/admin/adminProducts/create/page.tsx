@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { addProduct } from "@/lib/firebase"; // ✅ Import Firestore function
+import { addProduct } from "@/lib/firebase"; 
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -29,8 +29,8 @@ export default function CreateProduct() {
     setError(null);
 
     try {
-      toast.success("Product added successfully!"); // ✅ Add success message
-      await addProduct(product); //  Add product to Firestore
+      toast.success("Product added successfully!"); 
+      await addProduct(product); 
       router.push("/admin/adminProducts");
     } catch (err) {
       setError("Failed to add product. Please try again.");
