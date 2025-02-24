@@ -5,7 +5,7 @@ This project is a **Next.js**-based **E-commerce Admin Panel** and **Product Man
 ---
 
 ## 🚀 **Live Demo**
-🔗 **[Live Project Link](https://your-live-site-url.com)** *(Replace with your actual live site URL)*
+🔗 **[Live Project Link](https://zatiq-ecommerce.vercel.app/)**
 
 ---
 
