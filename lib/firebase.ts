@@ -101,3 +101,31 @@ export const getProductById = async (id: string) => {
     return null;
   }
 };
+
+// Check out order fetch
+export const getOrders = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    return querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate?.() || new Date(data.createdAt).toISOString(),
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return [];
+  }
+};
+
+// Delete order
+export const deleteOrder = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, "orders", id));
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    throw error;
+  }
+};

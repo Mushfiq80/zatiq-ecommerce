@@ -1,19 +1,23 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth(); 
   const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push("/admin/authAdmin"); 
+    if (!loading) {
+      if (!user) {
+        router.push("/admin/authAdmin");
+      }
+      setCheckingAuth(false);
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
-  if (!user) return <p>Loading...</p>; 
+  if (loading || checkingAuth) return <p>Loading...</p>; 
 
   return <>{children}</>;
 }

@@ -81,10 +81,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const orderData = {
         items,
         total: items.reduce((sum, item) => sum + item.price * item.quantity, 0),
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(), // Ensures correct timestamp format
       };
-
       await addDoc(collection(db, 'orders'), orderData);
+
 
       clearCart();
       alert('Order placed successfully!');
