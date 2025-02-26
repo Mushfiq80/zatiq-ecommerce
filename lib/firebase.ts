@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDyvc6VmGh7DehoRF89w_J063xEnAm7gFs",
-  authDomain: "zatiq-ecommerce.firebaseapp.com",
-  projectId: "zatiq-ecommerce",
-  storageBucket: "zatiq-ecommerce.firebasestorage.app",
-  messagingSenderId: "271581989581",
-  appId: "1:271581989581:web:e1b48e16f31972bf66f784"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 // Initialize Firebase

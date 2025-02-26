@@ -7,19 +7,19 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  loading: boolean;
+  loading: boolean; // ✅ Ensure auth state is resolved before rendering protected routes
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true); // ✅ Prevent infinite loading on first mount
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      setLoading(false);
+      setLoading(false); // ✅ Set loading false after Firebase finishes checking
     });
 
     return () => unsubscribe();
