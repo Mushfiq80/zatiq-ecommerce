@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { getProductById, updateProduct } from "@/lib/firebase";
 import { Product } from "@/types";
 
-export const dynamic = "force-dynamic"; // ✅ Ensures dynamic rendering
+export const dynamic = "force-dynamic"; // Ensures dynamic rendering
 
 export default function EditProduct() {
   const router = useRouter();

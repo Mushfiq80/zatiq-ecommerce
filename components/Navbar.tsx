@@ -15,7 +15,7 @@ import {
 import { useState } from 'react';
 
 export default function Navbar() {
-  const { items, total } = useCart();
+  const { items, updateQuantity, checkout, total } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -44,9 +44,11 @@ export default function Navbar() {
                 <Button variant="outline" size="icon" className="relative">
                   <ShoppingCart className="h-5 w-5" />
                   {items.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+
                       {items.length}
                     </span>
+
                   )}
                 </Button>
               </SheetTrigger>
@@ -59,14 +61,18 @@ export default function Navbar() {
                     ) : (
                       <div className="space-y-4">
                         {items.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-center justify-between"
-                          >
+                          <div key={item.id} className="flex items-center justify-between">
                             <div>
                               <div className="font-medium">{item.name}</div>
                               <div className="text-sm text-muted-foreground">
-                                Quantity: {item.quantity}
+                                Quantity:
+                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="ml-2">
+                                  ➖
+                                </button>
+                                {item.quantity}
+                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="ml-2">
+                                  ➕
+                                </button>
                               </div>
                             </div>
                             <div>${item.price * item.quantity}</div>
@@ -75,13 +81,14 @@ export default function Navbar() {
                         <div className="pt-4 border-t">
                           <div className="font-bold">Total: ${total}</div>
                         </div>
-                        <Button className="w-full">Checkout</Button>
+                        <Button className="w-full" onClick={checkout}>Checkout</Button>
                       </div>
                     )}
                   </div>
                 </SheetHeader>
               </SheetContent>
             </Sheet>
+
 
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
