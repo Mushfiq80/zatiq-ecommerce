@@ -6,18 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; 
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
-  const { toast } = useToast();
+  const { items, addItem } = useCart();
   const router = useRouter(); 
 
   const handleAddToCart = () => {
+    // Check if product is already in cart
+    const isAlreadyInCart = items.some(item => item.id === product.id);
+
+    if (isAlreadyInCart) {
+      toast.warn(`${product.name} is already in the cart`);
+      return;
+    }
+
     addItem({
       id: product.id,
       name: product.name,
@@ -26,16 +33,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       image: product.image,
     });
 
-    toast({
-      title: "Added to cart",
-      description: `${product.name} has been added to your cart.`,
-    });
+    toast.success(`${product.name} added to cart`);
   };
 
   const handleProductClick = () => {
-    
     localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
-
     router.push(`/product/${product.id}`);
   };
 

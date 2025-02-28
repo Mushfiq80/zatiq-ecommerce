@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from './firebase';
 import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 interface CartItem {
   id: string;
@@ -75,22 +76,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Checkout function
   const checkout = async () => {
-    if (items.length === 0) return alert('Your cart is empty.');
+    if (items.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
 
     try {
       const orderData = {
         items,
         total: items.reduce((sum, item) => sum + item.price * item.quantity, 0),
-        createdAt: new Date().toISOString(), // Ensures correct timestamp format
+        createdAt: new Date().toISOString(),
       };
       await addDoc(collection(db, 'orders'), orderData);
 
 
       clearCart();
-      alert('Order placed successfully!');
+      toast.success('Order placed successfully!');
     } catch (error) {
       console.error('Error placing order:', error);
-      alert('Failed to place order.');
+      toast.error('Failed to place order.');
     }
   };
 

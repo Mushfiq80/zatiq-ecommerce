@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { ShoppingCart, Menu, LogOut, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/lib/cart-context';
@@ -12,10 +13,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { useState } from 'react';
 
 export default function Navbar() {
-  const { items, total } = useCart();
+  const { items, updateQuantity, checkout, clearCart, total } = useCart();
   const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -23,10 +23,8 @@ export default function Navbar() {
     <nav className="border-b">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="text-2xl font-bold">Zatiq</Link>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/" className="hover:text-primary">Home</Link>
             <Link href="/products" className="hover:text-primary">Products</Link>
@@ -35,15 +33,13 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Cart & User Controls */}
           <div className="flex items-center space-x-4">
-            {/* Cart */}
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className="relative">
                   <ShoppingCart className="h-5 w-5" />
                   {items.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 text-black bg-primary rounded-full w-5 h-5 text-xs flex items-center justify-center">
                       {items.length}
                     </span>
                   )}
@@ -61,8 +57,15 @@ export default function Navbar() {
                           <div key={item.id} className="flex items-center justify-between">
                             <div>
                               <div className="font-medium">{item.name}</div>
-                              <div className="text-sm text-muted-foreground">
-                                Quantity: {item.quantity}
+                              <div className="text-sm text-muted-foreground flex items-center">
+                                Quantity:
+                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="ml-2 px-1 border rounded">
+                                  ➖
+                                </button>
+                                <span className="mx-2">{item.quantity}</span>
+                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-1 border rounded">
+                                  ➕
+                                </button>
                               </div>
                             </div>
                             <div>${item.price * item.quantity}</div>
@@ -71,7 +74,8 @@ export default function Navbar() {
                         <div className="pt-4 border-t">
                           <div className="font-bold">Total: ${total}</div>
                         </div>
-                        <Button className="w-full">Checkout</Button>
+                        <Button className="w-full" onClick={checkout}>Checkout</Button>
+                        <Button className="w-full mt-2" onClick={clearCart}>Clear Cart</Button>
                       </div>
                     )}
                   </div>
@@ -79,7 +83,6 @@ export default function Navbar() {
               </SheetContent>
             </Sheet>
 
-            {/* User Authentication Section */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
                 <Button variant="outline" size="icon">
@@ -93,8 +96,6 @@ export default function Navbar() {
                   <Link href={user ? "/admin/adminProducts" : "/admin/authAdmin"} className="hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                     Admin
                   </Link>
-
-                  {/* Login Button (If Not Logged In) */}
                   {!user && (
                     <Link href="/admin/authAdmin" className="hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                       <Button variant="outline" className="flex items-center space-x-2">
@@ -107,7 +108,6 @@ export default function Navbar() {
               </SheetContent>
             </Sheet>
 
-            {/* Show User Email & Logout Button if Logged In */}
             {user ? (
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-muted-foreground">{user.email}</span>
